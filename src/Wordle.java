@@ -11,25 +11,20 @@ import java.util.Scanner;
 
 public class Wordle
 {
-    /**
-     * Lots of colors for customization
-     */
-    private final String GREEN = "\u001B[32m";
-    private final String BLUE = "\u001B[36m";
-    private final String RED = "\u001B[31m";
-    private final String BROWN = "\u001B[33m";
-    private final String WHITE = "\u001B[37m";
+
     private final String BLACK = "\u001B[30m";
-    private final String CYAN = "\033[0;34m";
-    private final String BLUE_BRIGHT = "\033[0;94m";
-    private final String PURPLE = "\033[0;35m";
+    public static final String GREEN_BACKGROUND = "\033[42m";  // GREEN
+    public static final String YELLOW_BACKGROUND = "\033[43m"; // YELLOW
+    public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
 
 
     private ArrayList<String> possibleAnswers;
     private ArrayList<String> allWords;
 
     private Scanner scan;
-    private int numGuesses;
+    private Player player;
+    String[][] guesses;
+
 
     private String guess1;
     private String guess2;
@@ -42,14 +37,20 @@ public class Wordle
      * Constructor with no parameter
      * imports possibleAnswers and allWords
      * initializes scan to a Scanner object
-     * initializes numGuesses to 0
      */
     public Wordle()
     {
         importPossibleAnswers();
         importAllWords();
         scan = new Scanner(System.in);
-        numGuesses = 0;
+        guesses= new[6][5];
+        for(int row = 0; row < guesses.length; row++)
+        {
+            for(int col = 0; col < guesses[0].length; col++)
+            {
+                guesses[row][col] = " ";
+            }
+        }
     }
 
     public ArrayList<String> getPossibleAnswers()
@@ -68,11 +69,15 @@ public class Wordle
         int idx = (int) (Math.random() * possibleAnswers.size()) + 1;
         word = possibleAnswers.get(idx);
         boolean wordGuessed = false;
-        System.out.println("If a letter shows up gray it means it is not in the word.");
-        System.out.println("If a letter shows up yellow it is in the word but in the wrong spot");
-        System.out.println("If a letter shows up green, it is the right letter in the right spot");
-        System.out.println("Good Luck");
-        while ((numGuesses < 6) && (!wordGuessed))
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "What is your name?");
+        String playerName = scan.nextLine();
+        player = new Player(playerName);
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "Welcome to Wordle" + player.getName() + WHITE_BACKGROUND_BRIGHT + BLACK + "!");
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up Black it means it is not in the word.");
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up yellow it is in the word but in the wrong spot");
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up green, it is the right letter in the right spot");
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "Good Luck");
+        while ((player.getGuessNumber() < 6) && (!wordGuessed))
         {
             boolean doubledLetterColored = false;
             String guess = "";
@@ -84,19 +89,19 @@ public class Wordle
                 boolean spelledCorrectly = binarySpellCheck(guessAttempt);
                 if(guessAttempt.length() != 5)
                 {
-                    System.out.println("Please enter a word that is 5 letters long");
+                    System.out.println(BLACK + "Please enter a word that is 5 letters long");
                 }
                 else
                 {
                     if (spelledCorrectly)
                     {
                         actualWord = true;
-                        numGuesses++;
+                        player.setGuessNumber(player.getGuessNumber() + 1);
                         guess = guessAttempt;
                     }
                     else
                     {
-                        System.out.println("That is not a word");
+                        System.out.println(BLACK + "That is not a word");
                     }
                 }
             }
@@ -107,15 +112,15 @@ public class Wordle
                 {
                     if(guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
                     {
-                        newStr += GREEN + guess.substring(i, i + 1) + WHITE;
+                        newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                     else if(word.indexOf(guess.substring(i, i + 1)) >= 0)
                     {
-                        newStr += BROWN + guess.substring(i, i + 1) + WHITE;
+                        newStr += YELLOW_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                     else
                     {
-                        newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                        newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                 }
             }
@@ -126,15 +131,15 @@ public class Wordle
                     String tripledLetter = returnTripledLetter(guess);
                     if(guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
                     {
-                        newStr += GREEN + guess.substring(i, i + 1) + WHITE;
+                        newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                     else if(word.indexOf(guess.substring(i, i + 1)) >= 0)
                     {
-                        newStr += BROWN + guess.substring(i, i + 1) + WHITE;
+                        newStr += YELLOW_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                     else
                     {
-                        newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                        newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                     }
                 }
             }
@@ -149,7 +154,7 @@ public class Wordle
                         String changeGuess = guess;
                         if(guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
                         {
-                            newStr += GREEN + guess.substring(i, i + 1) + WHITE;
+                            newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                             doubledLetterColored = true;
                         }
                         else
@@ -159,23 +164,23 @@ public class Wordle
                             {
                                 if(firstOrSecondLetter == 1)
                                 {
-                                    newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                                    newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                                     firstOrSecondLetter++;
                                 }
                                 else
                                 {
-                                    newStr += GREEN + guess.substring(i, i + 1) + WHITE;
+                                    newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                                 }
 
                             }
                             else if(word.indexOf(guess.substring(i, i + 1)) >= 0)
                             {
-                                newStr += BROWN + guess.substring(i, i + 1) + WHITE;
+                                newStr += YELLOW_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                                 doubledLetterColored = true;
                             }
                             else
                             {
-                                newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                                newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                                 doubledLetterColored = true;
                             }
                         }
@@ -186,75 +191,93 @@ public class Wordle
                         {
                             if (guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
                             {
-                                newStr += GREEN + guess.substring(i, i + 1) + WHITE;
+                                newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                             }
                             else if (word.indexOf(guess.substring(i, i + 1)) >= 0)
                             {
-                                newStr += BROWN + guess.substring(i, i + 1) + WHITE;
+                                newStr += YELLOW_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                             }
                             else
                             {
-                                newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                                newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                             }
                         }
                         else
                         {
-                            newStr += WHITE + guess.substring(i, i + 1) + WHITE;
+                            newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
                         }
 
                     }
                 }
             }
-            if(numGuesses == 1)
+            if(player.getGuessNumber() == 1)
             {
-                guess1 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[0][i] = newStr.substring(i, i + 1);
+                }
             }
-            else if(numGuesses == 2)
+            else if(player.getGuessNumber() == 2)
             {
-                guess2 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[1][i] = newStr.substring(i, i + 1);
+                }
             }
-            else if(numGuesses == 3)
+            else if(player.getGuessNumber() == 3)
             {
-                guess3 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[2][i] = newStr.substring(i, i + 1);
+                }
             }
-            else if(numGuesses == 4)
+            else if(player.getGuessNumber() == 4)
             {
-                guess4 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[3][i] = newStr.substring(i, i + 1);
+                }
             }
-            else if(numGuesses == 5)
+            else if(player.getGuessNumber() == 5)
             {
-                guess5 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[4][i] = newStr.substring(i, i + 1);
+                }
             }
             else
             {
-                guess6 = newStr;
+                for(int i = 0; i < guesses.length; i++)
+                {
+                    guesses[5][i] = newStr.substring(i, i + 1);
+                }
             }
 
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
-            if(numGuesses == 1)
+            clearConsole();
+
+            if(player.getGuessNumber() == 1)
             {
                 System.out.println(guess1);
             }
-            else if(numGuesses == 2)
+            else if(player.getGuessNumber() == 2)
             {
                 System.out.println(guess1);
                 System.out.println(guess2);
             }
-            else if(numGuesses == 3)
+            else if(player.getGuessNumber() == 3)
             {
                 System.out.println(guess1);
                 System.out.println(guess2);
                 System.out.println(guess3);
             }
-            else if(numGuesses == 4)
+            else if(player.getGuessNumber() == 4)
             {
                 System.out.println(guess1);
                 System.out.println(guess2);
                 System.out.println(guess3);
                 System.out.println(guess4);
             }
-            else if(numGuesses == 5)
+            else if(player.getGuessNumber() == 5)
             {
                 System.out.println(guess1);
                 System.out.println(guess2);
@@ -275,23 +298,23 @@ public class Wordle
             {
                 wordGuessed = true;
                 System.out.println();
-                if(numGuesses == 1)
+                if(player.getGuessNumber() == 1)
                 {
                     System.out.println("Genius");
                 }
-                else if(numGuesses == 2)
+                else if(player.getGuessNumber() == 2)
                 {
                     System.out.println("Magnificent");
                 }
-                else if(numGuesses == 3)
+                else if(player.getGuessNumber() == 3)
                 {
                     System.out.println("Impressive");
                 }
-                else if(numGuesses == 4)
+                else if(player.getGuessNumber() == 4)
                 {
                     System.out.println("Splendid");
                 }
-                else if(numGuesses == 5)
+                else if(player.getGuessNumber() == 5)
                 {
                     System.out.println("Great");
                 }
@@ -301,7 +324,7 @@ public class Wordle
                 }
             }
         }
-        if(wordGuessed == false)
+        if(!wordGuessed)
         {
             System.out.println();
             System.out.println("BETTER LUCK NEXT TIME ");
@@ -538,5 +561,11 @@ public class Wordle
                 word.remove(i);
             }
         }
+    }
+
+    public static void clearConsole()
+    {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
