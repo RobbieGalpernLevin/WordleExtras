@@ -26,13 +26,6 @@ public class Wordle
     String[][] guesses;
 
 
-    private String guess1;
-    private String guess2;
-    private String guess3;
-    private String guess4;
-    private String guess5;
-    private String guess6;
-
     /**
      * Constructor with no parameter
      * imports possibleAnswers and allWords
@@ -43,7 +36,7 @@ public class Wordle
         importPossibleAnswers();
         importAllWords();
         scan = new Scanner(System.in);
-        guesses= new[6][5];
+        guesses = new String[6][5];
         for(int row = 0; row < guesses.length; row++)
         {
             for(int col = 0; col < guesses[0].length; col++)
@@ -72,7 +65,7 @@ public class Wordle
         System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "What is your name?");
         String playerName = scan.nextLine();
         player = new Player(playerName);
-        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "Welcome to Wordle" + player.getName() + WHITE_BACKGROUND_BRIGHT + BLACK + "!");
+        System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "Welcome to Wordle " + player.getName() + WHITE_BACKGROUND_BRIGHT + BLACK + "!");
         System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up Black it means it is not in the word.");
         System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up yellow it is in the word but in the wrong spot");
         System.out.println(WHITE_BACKGROUND_BRIGHT + BLACK + "If a letter shows up green, it is the right letter in the right spot");
@@ -210,90 +203,88 @@ public class Wordle
                     }
                 }
             }
+            while(newStr.indexOf("\033[42m") > 0)
+            {
+            newStr = newStr.substring(0, newStr.indexOf("033[42m") - 1) + newStr.substring(newStr.indexOf("033[42m") + 7);
+            System.out.println("hi");
+            }
+            while(newStr.indexOf("\033[43m") > 0)
+            {
+                newStr = newStr.substring(0, newStr.indexOf("033[43m") - 1) + newStr.substring(newStr.indexOf("033[43m") + 7);
+                System.out.println("hi");
+            }
+            while(newStr.indexOf("\033[0;107m") > 0)
+            {
+                newStr = newStr.substring(0, newStr.indexOf("033[0;107m") - 1) + newStr.substring(newStr.indexOf("033[0;107m") + 10);
+                System.out.println("hi");
+            }
+            while(newStr.indexOf("\u001B[30m") > 0)
+            {
+                newStr = newStr.substring(0, newStr.indexOf("u001B[30m") - 1) + newStr.substring(newStr.indexOf("u001B[30m") + 9);
+                System.out.println("hi");
+            }
+
+
             if(player.getGuessNumber() == 1)
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[0].length; i++)
                 {
                     guesses[0][i] = newStr.substring(i, i + 1);
                 }
             }
             else if(player.getGuessNumber() == 2)
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[1].length; i++)
                 {
                     guesses[1][i] = newStr.substring(i, i + 1);
                 }
             }
             else if(player.getGuessNumber() == 3)
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[2].length; i++)
                 {
                     guesses[2][i] = newStr.substring(i, i + 1);
                 }
             }
             else if(player.getGuessNumber() == 4)
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[3].length; i++)
                 {
                     guesses[3][i] = newStr.substring(i, i + 1);
                 }
             }
             else if(player.getGuessNumber() == 5)
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[4].length; i++)
                 {
                     guesses[4][i] = newStr.substring(i, i + 1);
                 }
             }
             else
             {
-                for(int i = 0; i < guesses.length; i++)
+                for(int i = 0; i < guesses[5].length; i++)
                 {
                     guesses[5][i] = newStr.substring(i, i + 1);
                 }
             }
-
             clearConsole();
 
-            if(player.getGuessNumber() == 1)
+            for(int row = 0; row < guesses.length; row++)
             {
-                System.out.println(guess1);
+                System.out.println();
+                System.out.print(row + 1 + ". ");
+                System.out.print("|");
+                for(int col = 0; col < guesses[0].length; col++)
+                {
+                    System.out.print(guesses[row][col]);
+                    if(col != guesses[0].length)
+                    {
+                        System.out.print("|");
+                    }
+                }
             }
-            else if(player.getGuessNumber() == 2)
-            {
-                System.out.println(guess1);
-                System.out.println(guess2);
-            }
-            else if(player.getGuessNumber() == 3)
-            {
-                System.out.println(guess1);
-                System.out.println(guess2);
-                System.out.println(guess3);
-            }
-            else if(player.getGuessNumber() == 4)
-            {
-                System.out.println(guess1);
-                System.out.println(guess2);
-                System.out.println(guess3);
-                System.out.println(guess4);
-            }
-            else if(player.getGuessNumber() == 5)
-            {
-                System.out.println(guess1);
-                System.out.println(guess2);
-                System.out.println(guess3);
-                System.out.println(guess4);
-                System.out.println(guess5);
-            }
-            else
-            {
-                System.out.println(guess1);
-                System.out.println(guess2);
-                System.out.println(guess3);
-                System.out.println(guess4);
-                System.out.println(guess5);
-                System.out.println(guess6);
-            }
+            System.out.println();
+
             if(guess.equals(word))
             {
                 wordGuessed = true;
