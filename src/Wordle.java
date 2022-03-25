@@ -23,7 +23,12 @@ public class Wordle
 
     private Scanner scan;
     private Player player;
-    String[][] guesses;
+    private String guess1;
+    private String guess2;
+    private String guess3;
+    private String guess4;
+    private String guess5;
+    private String guess6;
 
 
     /**
@@ -36,14 +41,6 @@ public class Wordle
         importPossibleAnswers();
         importAllWords();
         scan = new Scanner(System.in);
-        guesses = new String[6][5];
-        for(int row = 0; row < guesses.length; row++)
-        {
-            for(int col = 0; col < guesses[0].length; col++)
-            {
-                guesses[row][col] = " ";
-            }
-        }
     }
 
     public ArrayList<String> getPossibleAnswers()
@@ -84,6 +81,10 @@ public class Wordle
                 {
                     System.out.println(BLACK + "Please enter a word that is 5 letters long");
                 }
+                else if(hasTripleLetter(guessAttempt))
+                {
+                    System.out.println(BLACK + "Please enter a word that does not have the same letter 3 times");
+                }
                 else
                 {
                     if (spelledCorrectly)
@@ -99,29 +100,10 @@ public class Wordle
                 }
             }
             String newStr = "";
-            if(!hasTripleLetter(guess) && !hasDoubleLetter(guess))
+            if(!hasDoubleLetter(guess))
             {
                 for(int i = 0; i < 5; i++)
                 {
-                    if(guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
-                    {
-                        newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
-                    }
-                    else if(word.indexOf(guess.substring(i, i + 1)) >= 0)
-                    {
-                        newStr += YELLOW_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
-                    }
-                    else
-                    {
-                        newStr += WHITE_BACKGROUND_BRIGHT + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
-                    }
-                }
-            }
-            else if(hasTripleLetter(guess))
-            {
-                for(int i = 0; i < 5; i++)
-                {
-                    String tripledLetter = returnTripledLetter(guess);
                     if(guess.indexOf(guess.substring(i, i + 1)) == word.indexOf(guess.substring(i, i + 1)))
                     {
                         newStr += GREEN_BACKGROUND + BLACK + guess.substring(i, i + 1) + WHITE_BACKGROUND_BRIGHT;
@@ -203,87 +185,53 @@ public class Wordle
                     }
                 }
             }
-            while(newStr.indexOf("\033[42m") > 0)
-            {
-            newStr = newStr.substring(0, newStr.indexOf("033[42m") - 1) + newStr.substring(newStr.indexOf("033[42m") + 7);
-            System.out.println("hi");
-            }
-            while(newStr.indexOf("\033[43m") > 0)
-            {
-                newStr = newStr.substring(0, newStr.indexOf("033[43m") - 1) + newStr.substring(newStr.indexOf("033[43m") + 7);
-                System.out.println("hi");
-            }
-            while(newStr.indexOf("\033[0;107m") > 0)
-            {
-                newStr = newStr.substring(0, newStr.indexOf("033[0;107m") - 1) + newStr.substring(newStr.indexOf("033[0;107m") + 10);
-                System.out.println("hi");
-            }
-            while(newStr.indexOf("\u001B[30m") > 0)
-            {
-                newStr = newStr.substring(0, newStr.indexOf("u001B[30m") - 1) + newStr.substring(newStr.indexOf("u001B[30m") + 9);
-                System.out.println("hi");
-            }
 
 
             if(player.getGuessNumber() == 1)
             {
-                for(int i = 0; i < guesses[0].length; i++)
-                {
-                    guesses[0][i] = newStr.substring(i, i + 1);
-                }
+                guess1 = newStr;
+                System.out.println(guess1);
             }
             else if(player.getGuessNumber() == 2)
             {
-                for(int i = 0; i < guesses[1].length; i++)
-                {
-                    guesses[1][i] = newStr.substring(i, i + 1);
-                }
+                guess2 = newStr;
+                System.out.println(guess1);
+                System.out.println(guess2);
             }
             else if(player.getGuessNumber() == 3)
             {
-                for(int i = 0; i < guesses[2].length; i++)
-                {
-                    guesses[2][i] = newStr.substring(i, i + 1);
-                }
+                guess3 = newStr;
+                System.out.println(guess1);
+                System.out.println(guess2);
+                System.out.println(guess3);
             }
             else if(player.getGuessNumber() == 4)
             {
-                for(int i = 0; i < guesses[3].length; i++)
-                {
-                    guesses[3][i] = newStr.substring(i, i + 1);
-                }
+                guess4 = newStr;
+                System.out.println(guess1);
+                System.out.println(guess2);
+                System.out.println(guess3);
+                System.out.println(guess4);
             }
             else if(player.getGuessNumber() == 5)
             {
-                for(int i = 0; i < guesses[4].length; i++)
-                {
-                    guesses[4][i] = newStr.substring(i, i + 1);
-                }
+                guess5 = newStr;
+                System.out.println(guess1);
+                System.out.println(guess2);
+                System.out.println(guess3);
+                System.out.println(guess4);
+                System.out.println(guess5);
             }
             else
             {
-                for(int i = 0; i < guesses[5].length; i++)
-                {
-                    guesses[5][i] = newStr.substring(i, i + 1);
-                }
+                guess6 = newStr;
+                System.out.println(guess1);
+                System.out.println(guess2);
+                System.out.println(guess3);
+                System.out.println(guess4);
+                System.out.println(guess5);
+                System.out.println(guess6);
             }
-            clearConsole();
-
-            for(int row = 0; row < guesses.length; row++)
-            {
-                System.out.println();
-                System.out.print(row + 1 + ". ");
-                System.out.print("|");
-                for(int col = 0; col < guesses[0].length; col++)
-                {
-                    System.out.print(guesses[row][col]);
-                    if(col != guesses[0].length)
-                    {
-                        System.out.print("|");
-                    }
-                }
-            }
-            System.out.println();
 
             if(guess.equals(word))
             {
@@ -318,8 +266,8 @@ public class Wordle
         if(!wordGuessed)
         {
             System.out.println();
-            System.out.println("BETTER LUCK NEXT TIME ");
-            System.out.println("THE WORD WAS " + word);
+            System.out.println(BLACK + "BETTER LUCK NEXT TIME ");
+            System.out.println(BLACK + "THE WORD WAS " + word);
         }
     }
 
@@ -354,7 +302,7 @@ public class Wordle
 
     private void removeWordsWithDoubleLettersFromPossibleAnswers()
     {
-        for(int i = 1; i < possibleAnswers.size(); i++)
+        for(int i = 0; i < possibleAnswers.size(); i++)
         {
             String letter1 = possibleAnswers.get(i).substring(0, 1);
             String letter2 = possibleAnswers.get(i).substring(1, 2);
@@ -426,7 +374,6 @@ public class Wordle
             return "this will never be returned";
         }
     }
-
     private static boolean hasTripleLetter(String word)
     {
         String letter1 = word.substring(0, 1);
@@ -441,30 +388,6 @@ public class Wordle
         return false;
     }
 
-    private static String returnTripledLetter(String word)
-    {
-        String letter1 = word.substring(0, 1);
-        String letter2 = word.substring(1, 2);
-        String letter3 = word.substring(2, 3);
-        String letter4 = word.substring(3, 4);
-        String letter5 = word.substring(4);
-        if((letter1.equals(letter2) && letter1.equals(letter3)) || (letter1.equals(letter2) && letter1.equals(letter4)) || (letter1.equals(letter2) && letter1.equals(letter5)) || (letter1.equals(letter3) && letter1.equals(letter4)) || (letter1.equals(letter3) && letter1.equals(letter5)) || (letter1.equals(letter4) && letter1.equals(letter5)))
-        {
-            return letter1;
-        }
-        else if((letter2.equals(letter3) && letter2.equals(letter4)) || (letter2.equals(letter3) && letter2.equals(letter5)) || (letter2.equals(letter4) && letter2.equals(letter5)))
-        {
-            return letter2;
-        }
-        else if((letter3.equals(letter4) && letter3.equals(letter5)))
-        {
-            return letter3;
-        }
-        else
-        {
-            return "this will never be returned";
-        }
-    }
 
     // private helper method, called in the constructor, which loads the words
     // from the allWords.txt text file into the "dictionary" instance variable!
@@ -552,11 +475,5 @@ public class Wordle
                 word.remove(i);
             }
         }
-    }
-
-    public static void clearConsole()
-    {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }
